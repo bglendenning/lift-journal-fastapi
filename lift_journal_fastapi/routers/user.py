@@ -1,9 +1,9 @@
-from fastapi import APIRouter
-from lift_journal_data.schemas import request
+from fastapi import APIRouter, Response, status
+from lift_journal_data.schemas import requests
 
 router = APIRouter()
 
 
-@router.post("/user/register")
-def register(user: request.User):
-    return user
+@router.post("/user/register", status_code=status.HTTP_202_ACCEPTED)
+def register(user: requests.UserRegister):
+    return Response(status_code=status.HTTP_202_ACCEPTED)
