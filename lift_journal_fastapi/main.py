@@ -4,7 +4,7 @@ from lift_journal_fastapi.routers import user
 
 app = FastAPI()
 
-app.include_router(user.router)
+app.include_router(user.router, prefix="/user")
 
 
 @app.get("/")
