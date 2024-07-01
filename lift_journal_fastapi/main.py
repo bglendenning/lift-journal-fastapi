@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from routers import user
+from lift_journal_fastapi.routers import user
 
 app = FastAPI()
 
