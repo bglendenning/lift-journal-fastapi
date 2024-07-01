@@ -1,7 +1,7 @@
 from typing_extensions import Self
 
 from lift_journal_data.schemas.user import UserSchema
-from pydantic import field_validator, model_validator, ValidationInfo
+from pydantic import model_validator
 
 
 class UserCreateSchema(UserSchema):
@@ -9,14 +9,6 @@ class UserCreateSchema(UserSchema):
 
     class Config:
         from_attributes = True
-
-    @field_validator("password", "password2")
-    @classmethod
-    def check_empty(cls, value: str, info: ValidationInfo) -> str:
-        if not value:
-            raise ValueError(f"{info.field_name} cannot be empty")
-
-        return value
 
     @model_validator(mode="after")
     def passwords_match(self) -> Self:
