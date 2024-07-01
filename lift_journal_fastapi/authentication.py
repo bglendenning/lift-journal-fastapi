@@ -44,10 +44,9 @@ def get_token_user(token: Annotated[str, Depends(oauth2_scheme)]):
     if not email:
         raise credentials_exception
 
-    with db.SessionLocal() as session:
-        user = UserDAO(session).get_for_email(email)
+    user = UserDAO(db.SessionLocal()).get_for_email(email)
 
     if not user:
         raise credentials_exception
 
-    return UserReadSchema(user)
+    return UserReadSchema(email=user.email)

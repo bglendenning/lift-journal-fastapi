@@ -22,27 +22,24 @@ def read_root(token: Annotated[str, Depends(oauth2_scheme)]):
 
 @router.post("/token/create")
 async def create_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> TokenSchema:
-    with db.SessionLocal() as session:
-        user = UserSchema(email=form_data.username, password=form_data.password)
-        db_user = UserDAO(session).get_for_email(user.email)
+    user = UserSchema(email=form_data.username, password=form_data.password)
+    db_user = UserDAO(db.SessionLocal()).get_for_email(user.email)
 
-        if not pwd_context.verify(form_data.password, db_user.password):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Incorrect email or password",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
+    if not pwd_context.verify(form_data.password, db_user.password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
-        access_token = create_access_token({"sub": user.email})
+    access_token = create_access_token({"sub": user.email})
 
-        return TokenSchema(access_token=access_token, token_type="bearer")
+    return TokenSchema(access_token=access_token, token_type="bearer")
 
 
 @router.post("/create", status_code=status.HTTP_202_ACCEPTED)
 async def create_user(user: UserCreateSchema):
     user.password2 = user.password = pwd_context.hash(user.password)
-
-    with db.SessionLocal() as session:
-        UserDAO(session).create(user)
+    UserDAO(db.SessionLocal()).create(user)
 
     return Response(status_code=status.HTTP_202_ACCEPTED)
