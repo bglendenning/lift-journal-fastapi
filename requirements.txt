@@ -1,4 +1,5 @@
 fastapi
 passlib[bcrypt]
 pydantic
+pyjwt
 git+https://github.com/bglendenning/lift-journal-data.git

@@ -21,6 +21,10 @@ class UserCreateSchema(UserSchema):
         return self
 
 
+class UserReadSchema(UserSchema):
+    email: str
+
+
 class TokenSchema(BaseModel):
     access_token: str
     token_type: str
