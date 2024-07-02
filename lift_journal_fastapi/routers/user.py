@@ -6,8 +6,8 @@ from lift_journal_data.crud import UserDAO
 from passlib.context import CryptContext
 
 from lift_journal_fastapi import db
-from lift_journal_fastapi.authentication import authenticate_user, create_access_token, oauth2_scheme
-from lift_journal_fastapi.schemas.user import TokenSchema, UserCreateSchema
+from lift_journal_fastapi.authentication import authenticate_user, create_access_token, get_token_user
+from lift_journal_fastapi.schemas.user import TokenSchema, UserCreateSchema, UserReadSchema
 
 router = APIRouter()
 
@@ -15,8 +15,8 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 @router.get("/")
-def read_root(token: Annotated[str, Depends(oauth2_scheme)]):
-    return {"Hello": "World"}
+def read_root(user: Annotated[UserReadSchema, Depends(get_token_user)]):
+    return {"Hello": user.email}
 
 
 @router.post("/token/create")
@@ -30,7 +30,7 @@ async def create_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    access_token = create_access_token({"sub": user.email})
+    access_token = create_access_token({"sub": user.email, "id": user.id})
 
     return TokenSchema(access_token=access_token, token_type="bearer")
 

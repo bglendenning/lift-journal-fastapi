@@ -7,10 +7,10 @@ from fastapi.exceptions import HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
 from lift_journal_data.crud import UserDAO
-from lift_journal_data.schemas.user import UserBaseSchema, UserSchema
 from passlib.context import CryptContext
 
 from lift_journal_fastapi import db
+from lift_journal_fastapi.schemas import UserReadSchema
 
 SECRET_KEY = "secret_key"
 ALGORITHM = "HS256"
@@ -47,17 +47,16 @@ def get_token_user(token: Annotated[str, Depends(oauth2_scheme)]):
     if not email:
         raise credentials_exception
 
-    user = UserDAO(db.SessionLocal()).get_for_email(email)
+    db_user = UserDAO(db.SessionLocal()).get_for_email(email)
 
-    if not user:
+    if not db_user:
         raise credentials_exception
 
-    return UserBaseSchema(email=user.email)
+    return UserReadSchema(email=db_user.email, id=db_user.id)
 
 
 def authenticate_user(form_data: OAuth2PasswordRequestForm):
-    user = UserSchema(email=form_data.username, password=form_data.password)
-    db_user = UserDAO(db.SessionLocal()).get_for_email(user.email)
+    db_user = UserDAO(db.SessionLocal()).get_for_email(form_data.username)
 
     if db_user and pwd_context.verify(form_data.password, db_user.password):
-        return UserBaseSchema(email=db_user.email)
+        return UserReadSchema(email=db_user.email, id=db_user.id)
