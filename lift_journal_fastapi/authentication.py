@@ -7,10 +7,10 @@ from fastapi.exceptions import HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
 from lift_journal_data.crud import UserDAO
+from lift_journal_data.schemas.user import UserReadSchema
 from passlib.context import CryptContext
 
 from lift_journal_fastapi import db
-from lift_journal_fastapi.schemas import UserReadSchema
 
 SECRET_KEY = "secret_key"
 ALGORITHM = "HS256"

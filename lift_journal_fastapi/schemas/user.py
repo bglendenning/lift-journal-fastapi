@@ -1,10 +1,10 @@
 from typing_extensions import Self
 
-from lift_journal_data.schemas.user import UserBaseSchema, UserSchema
+from lift_journal_data.schemas.user import UserCreateSchema
 from pydantic import BaseModel, model_validator
 
 
-class UserCreateSchema(UserSchema):
+class UserCreateMatchSchema(UserCreateSchema):
     password2: str
 
     class Config:
@@ -19,10 +19,6 @@ class UserCreateSchema(UserSchema):
             raise ValueError("Passwords do not match")
 
         return self
-
-
-class UserReadSchema(UserBaseSchema):
-    id: int
 
 
 class TokenSchema(BaseModel):

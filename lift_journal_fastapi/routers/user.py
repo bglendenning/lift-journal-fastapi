@@ -3,11 +3,12 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from lift_journal_data.crud import UserDAO
+from lift_journal_data.schemas.user import UserReadSchema
 from passlib.context import CryptContext
 
 from lift_journal_fastapi import db
 from lift_journal_fastapi.authentication import authenticate_user, create_access_token, get_token_user
-from lift_journal_fastapi.schemas.user import TokenSchema, UserCreateSchema, UserReadSchema
+from lift_journal_fastapi.schemas.user import TokenSchema, UserCreateMatchSchema
 
 router = APIRouter()
 
@@ -36,7 +37,7 @@ async def create_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()
 
 
 @router.post("/create", status_code=status.HTTP_202_ACCEPTED)
-async def create_user(user: UserCreateSchema):
+async def create_user(user: UserCreateMatchSchema):
     user.password2 = user.password = pwd_context.hash(user.password)
     UserDAO(db.SessionLocal()).create(user)
 
