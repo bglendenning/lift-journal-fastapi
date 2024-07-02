@@ -3,11 +3,10 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from lift_journal_data.crud import UserDAO
-from lift_journal_data.schemas.user import UserSchema
 from passlib.context import CryptContext
 
 from lift_journal_fastapi import db
-from lift_journal_fastapi.authentication import create_access_token, oauth2_scheme
+from lift_journal_fastapi.authentication import authenticate_user, create_access_token, oauth2_scheme
 from lift_journal_fastapi.schemas.user import TokenSchema, UserCreateSchema
 
 router = APIRouter()
@@ -22,10 +21,9 @@ def read_root(token: Annotated[str, Depends(oauth2_scheme)]):
 
 @router.post("/token/create")
 async def create_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> TokenSchema:
-    user = UserSchema(email=form_data.username, password=form_data.password)
-    db_user = UserDAO(db.SessionLocal()).get_for_email(user.email)
+    user = authenticate_user(form_data)
 
-    if not pwd_context.verify(form_data.password, db_user.password):
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",
