@@ -21,7 +21,7 @@ user@host:./lift-journal-data$ export LIFT_JOURNAL_DATA_DB_PASSWORD=<database pa
 user@host:./lift-journal-data$ export LIFT_JOUNRAL_DATA_DB_SERVER=<database server>
 user@host:./lift-journal-data$ export LIFT_JOURNAL_DATA_DB_NAME=<database name>
 
-#URL database configuration
+# URL database configuration
 user@host:./lift-journal-data$ export LIFT_JOURNAL_DATA_DB_URL=<database url>
 ```
 
