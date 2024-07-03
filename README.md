@@ -40,5 +40,5 @@ user@host:./lift-journal-fastapi$ ljd_manage <arguments>
 ## Running the development server
 
 ```bash
-user@host:./lift-journal-data/lift_journal_fastapi$ fastapi dev main.py
+user@host:./lift_journal_fastapi$ fastapi dev main.py
 ```
