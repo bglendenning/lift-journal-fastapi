@@ -27,7 +27,7 @@ user@host:./lift-journal-data$ export LIFT_JOURNAL_DATA_DB_URL=<database url>
 
 ## Managing the database
 
-`lift_journal_data.db.manage` provides database management functions. The script provides three command line arguments:
+_[Lift Journal Data](https://github.com/bglendenning/lift-journal-data)_ provides database management functions. The script provides three command line arguments:
 
 * `--create-tables` creates all non-existent tables defined in the ORM models
 * `--drop-tables` drops all existent tables defined in the ORM models
