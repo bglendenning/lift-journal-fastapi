@@ -12,17 +12,17 @@ user@host:./lift-journal-fastapi$ pip install -r requirements.txt
 
 ```bash
 # Secret key (for generating JWT)
-user@host:./lift-journal-data$ export LIFT_JOURNAL_FASTAPI_SECRET_KEY=<secret_key>
+user@host:./lift-journal-fastapi$ export LIFT_JOURNAL_FASTAPI_SECRET_KEY=<secret_key>
 
 # Granular database configuration
-user@host:./lift-journal-data$ export LIFT_JOURNAL_DATA_DB_ENGINE=<database engine>
-user@host:./lift-journal-data$ export LIFT_JOURNAL_DATA_DB_USERNAME=<database username>
-user@host:./lift-journal-data$ export LIFT_JOURNAL_DATA_DB_PASSWORD=<database password>
-user@host:./lift-journal-data$ export LIFT_JOUNRAL_DATA_DB_SERVER=<database server>
-user@host:./lift-journal-data$ export LIFT_JOURNAL_DATA_DB_NAME=<database name>
+user@host:./lift-journal-fastapi$ export LIFT_JOURNAL_DATA_DB_ENGINE=<database engine>
+user@host:./lift-journal-fastapi$ export LIFT_JOURNAL_DATA_DB_USERNAME=<database username>
+user@host:./lift-journal-fastapi$ export LIFT_JOURNAL_DATA_DB_PASSWORD=<database password>
+user@host:./lift-journal-fastapi$ export LIFT_JOUNRAL_DATA_DB_SERVER=<database server>
+user@host:./lift-journal-fastapi$ export LIFT_JOURNAL_DATA_DB_NAME=<database name>
 
 # URL database configuration
-user@host:./lift-journal-data$ export LIFT_JOURNAL_DATA_DB_URL=<database url>
+user@host:./lift-journal-fastapi$ export LIFT_JOURNAL_DATA_DB_URL=<database url>
 ```
 
 ## Managing the database
@@ -34,7 +34,7 @@ _[Lift Journal Data](https://github.com/bglendenning/lift-journal-data)_ provide
 * `--load-lifts` populates the `lift` table with fixture data
 
 ```bash
-user@host:./lift-journal-data$ ljd_manage <arguments>
+user@host:./lift-journal-fastapi$ ljd_manage <arguments>
 ```
 
 ## Running the development server
