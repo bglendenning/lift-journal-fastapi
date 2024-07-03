@@ -3,11 +3,10 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from fastapi.security import OAuth2PasswordRequestForm
 from lift_journal_data.crud import UserDAO
-from lift_journal_data.schemas.user import UserReadSchema
 from passlib.context import CryptContext
 
 from lift_journal_fastapi import db
-from lift_journal_fastapi.authentication import authenticate_user, create_access_token, get_token_user
+from lift_journal_fastapi.authentication import authenticate_user, create_access_token
 from lift_journal_fastapi.schemas.user import TokenSchema, UserCreateMatchSchema
 
 router = APIRouter()
@@ -15,7 +14,7 @@ router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-@router.post("/token/create")
+@router.post("/token/create", tags=["Users"])
 async def create_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> TokenSchema:
     user = authenticate_user(form_data)
 
@@ -31,7 +30,7 @@ async def create_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()
     return TokenSchema(access_token=access_token, token_type="bearer")
 
 
-@router.post("/create", status_code=status.HTTP_202_ACCEPTED)
+@router.post("/create", status_code=status.HTTP_202_ACCEPTED, tags=["Users"])
 async def create_user(user: UserCreateMatchSchema) -> Response:
     user.password2 = user.password = pwd_context.hash(user.password)
     UserDAO(db.SessionLocal()).create(user)

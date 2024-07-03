@@ -11,7 +11,7 @@ from lift_journal_fastapi.authentication import get_token_user
 router = APIRouter()
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED, tags=["Lift Sets"])
 def post_lift_set(
         lift_set: LiftSetBaseSchema,
         user: Annotated[UserReadSchema, Depends(get_token_user)]
@@ -31,7 +31,7 @@ def post_lift_set(
     return LiftSetReadSchema.from_orm(db_lift_set)
 
 
-@router.get("/{lift_set_id}")
+@router.get("/{lift_set_id}", tags=["Lift Sets"])
 def get_lift_set(
         lift_set_id: int,
         user: Annotated[UserReadSchema, Depends(get_token_user)]
@@ -44,7 +44,7 @@ def get_lift_set(
     return LiftSetReadSchema.parse_obj(db_lift_set)
 
 
-@router.get("/")
+@router.get("/", tags=["Lift Sets"])
 def get_lift_sets(user: Annotated[UserReadSchema, Depends(get_token_user)]) -> list[LiftSetReadSchema]:
     db_lift_sets = LiftSetDAO(db.SessionLocal(), user.id).get_for_user_id()
 
