@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta, timezone
 from typing_extensions import Annotated
 
@@ -12,7 +13,7 @@ from passlib.context import CryptContext
 
 from lift_journal_fastapi import db
 
-SECRET_KEY = "secret_key"
+SECRET_KEY = os.environ["LIFT_JOURNAL_FASTAPI_SECRET_KEY"]
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
