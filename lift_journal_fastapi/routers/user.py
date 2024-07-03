@@ -15,11 +15,6 @@ router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-@router.get("/")
-def read_root(user: Annotated[UserReadSchema, Depends(get_token_user)]):
-    return {"Hello": user.email}
-
-
 @router.post("/token/create")
 async def create_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> TokenSchema:
     user = authenticate_user(form_data)
@@ -37,7 +32,7 @@ async def create_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()
 
 
 @router.post("/create", status_code=status.HTTP_202_ACCEPTED)
-async def create_user(user: UserCreateMatchSchema):
+async def create_user(user: UserCreateMatchSchema) -> Response:
     user.password2 = user.password = pwd_context.hash(user.password)
     UserDAO(db.SessionLocal()).create(user)
 
