@@ -14,7 +14,15 @@ tags_metadata = [
     },
 ]
 
-app = FastAPI(openapi_tags=tags_metadata)
+app = FastAPI(
+    title="Lift Journal FastAPI",
+    contact={
+        "name": "Brandan Glendenning",
+        "url": "https://github.com/bglendenning/lift-journal-fastapi",
+        "email": "brandan@glendigi.com",
+    },
+    openapi_tags=tags_metadata,
+)
 
 app.include_router(user.router, prefix="/users")
 app.include_router(lift_set.router, prefix="/lift-sets")
