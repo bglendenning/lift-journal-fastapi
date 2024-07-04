@@ -31,8 +31,11 @@ async def create_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()
 
 
 @router.post("/create", status_code=status.HTTP_202_ACCEPTED, tags=["Users"])
-async def create_user(user: UserCreateMatchSchema) -> Response:
+async def create_user(
+        user: UserCreateMatchSchema,
+        session=Depends(db.get_session),
+) -> Response:
     user.password2 = user.password = pwd_context.hash(user.password)
-    UserDAO(db.SessionLocal()).create(user)
+    UserDAO(session).create(user)
 
     return Response(status_code=status.HTTP_202_ACCEPTED)
