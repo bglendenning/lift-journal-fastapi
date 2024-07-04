@@ -30,7 +30,7 @@ def post_lift_set(
     if not db_lift_set:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="LiftSet not created")
 
-    return LiftSetReadSchema.from_orm(db_lift_set)
+    return LiftSetReadSchema.model_config(db_lift_set)
 
 
 @router.get("/{lift_set_id}", tags=["Lift Sets"])
@@ -44,7 +44,7 @@ def get_lift_set(
     if not db_lift_set:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="LiftSet not found")
 
-    return LiftSetReadSchema.parse_obj(db_lift_set)
+    return LiftSetReadSchema.model_validate(db_lift_set)
 
 
 @router.get("/", tags=["Lift Sets"])

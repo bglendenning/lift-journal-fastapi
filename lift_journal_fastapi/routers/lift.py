@@ -18,4 +18,4 @@ def get_lifts(
 ) -> list[LiftSchema]:
     db_lifts = LiftDAO(session).get_all()
 
-    return [LiftSchema.parse_obj(db_lift) for db_lift in db_lifts]
+    return [LiftSchema.model_validate(db_lift) for db_lift in db_lifts]
