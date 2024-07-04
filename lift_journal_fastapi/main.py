@@ -1,16 +1,21 @@
 from fastapi import FastAPI
 
 from lift_journal_fastapi.routers import user
+from lift_journal_fastapi.routers import lift
 from lift_journal_fastapi.routers import lift_set
 
 tags_metadata = [
     {
         "name": "Users",
-        "description": "Operations on users, including authentication."
+        "description": "Operations on users, including authentication.",
+    },
+    {
+        "name": "Lifts",
+        "description": "Operations on lifts.",
     },
     {
         "name": "Lift Sets",
-        "description": "Operations on lift sets."
+        "description": "Operations on lift sets.",
     },
 ]
 
@@ -25,4 +30,5 @@ app = FastAPI(
 )
 
 app.include_router(user.router, prefix="/users")
+app.include_router(lift.router, prefix="/lifts")
 app.include_router(lift_set.router, prefix="/lift-sets")
