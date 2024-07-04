@@ -7,6 +7,7 @@ from lift_journal_data.schemas.lift_set import LiftSetBaseSchema, LiftSetReadSch
 
 from lift_journal_fastapi import db
 from lift_journal_fastapi.authentication import get_token_user
+from lift_journal_fastapi.schemas.lift_set import LiftSetCollectionResponseSchema
 
 router = APIRouter()
 
@@ -49,11 +50,16 @@ def get_lift_set(
 @router.get("/", tags=["Lift Sets"])
 def get_lift_sets(
         user: Annotated[UserReadSchema, Depends(get_token_user)],
+        page: int = 1,
         session=Depends(db.get_session),
-) -> list[LiftSetReadSchema]:
-    db_lift_sets = LiftSetDAO(session, user.id).get_for_user_id()
+) -> LiftSetCollectionResponseSchema:
+    db_lift_sets, count, pages = LiftSetDAO(session, user.id).get_for_user_id(page=page)
 
-    return [LiftSetReadSchema.parse_obj(db_lift_set) for db_lift_set in db_lift_sets]
+    return LiftSetCollectionResponseSchema(
+        items=[LiftSetReadSchema.model_validate(db_lift_set) for db_lift_set in db_lift_sets],
+        pages=pages,
+        count=count,
+    )
 
 
 @router.delete("/{lift_set_id}", tags=["Lift Sets"])
