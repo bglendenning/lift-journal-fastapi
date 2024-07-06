@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from lift_journal_data.crud import LiftSetDAO
 from lift_journal_data.schemas.user import UserReadSchema
-from lift_journal_data.schemas.lift_set import LiftSetBaseSchema, LiftSetReadSchema
+from lift_journal_data.schemas.lift_set import LiftSetBaseSchema, LiftSetReadSchema, LiftSetUpdateSchema
 
 from lift_journal_fastapi import db
 from lift_journal_fastapi.authentication import get_token_user
@@ -30,7 +30,7 @@ def post_lift_set(
     if not db_lift_set:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="LiftSet not created")
 
-    return LiftSetReadSchema.model_config(db_lift_set)
+    return LiftSetReadSchema.model_validate(db_lift_set)
 
 
 @router.get("/{lift_set_id}", tags=["Lift Sets"])
@@ -60,6 +60,18 @@ def get_lift_sets(
         pages=pages,
         count=count,
     )
+
+
+@router.patch("/{lift_set_id}", tags=["Lift Sets"])
+def patch_lift_set(
+        lift_set_id: int,
+        lift_set: LiftSetUpdateSchema,
+        user: Annotated[UserReadSchema, Depends(get_token_user)],
+        session=Depends(db.get_session),
+):
+    rows_updated = LiftSetDAO(session, user.id).update_for_lift_set_id(lift_set_id, lift_set)
+
+    return {"rows_updated": rows_updated}
 
 
 @router.delete("/{lift_set_id}", tags=["Lift Sets"])
